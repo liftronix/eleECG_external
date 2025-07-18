@@ -1,0 +1,11 @@
+{
+  "wifi": {
+      "ssid": "GHOSH_SAP",
+      "password": "lifeline101"
+  }
+  "mqtt": {
+      "host": "demo.thingsboard.io",
+      "key": "3NwWSM4F9a35rsPyhvI9"
+      "publish_interval_sec": "5"
+  }
+}
