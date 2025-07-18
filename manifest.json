@@ -13,105 +13,105 @@
       "sha256": "abc4c06419e904aa0eb1e19685f897159e75fce9878fa101485edb5ddfcade19",
       "size": 6
     },
-    "lib/config_loader.py": {
-      "sha256": "6a6d5bb016282003d7bf276cceacf4ee6b43dd38e7c00b4195521ddb84d7de02",
-      "size": 241
+    "lib/config_loader.mpy": {
+      "sha256": "d8613befda2b306d281fc34d10ac24f7dd475998db6eddbb160c6c5b3c0fc6bc",
+      "size": 273
     },
-    "lib/core1_manager.py": {
-      "sha256": "63327380e7759a4696372178775c2ae901cf338317c0806221dc35f37e97c5dd",
-      "size": 6884
+    "lib/core1_manager.mpy": {
+      "sha256": "17fded7fd2c1398fd991accccb70aa0bcfc2d96ea41c84d91612041185b4d7b6",
+      "size": 2946
     },
-    "lib/cpu_baseline.py": {
-      "sha256": "4c6063a0fd5c4452e5caccc083a4d6e26575d81fced8fae8fb18867c7591fc91",
-      "size": 962
+    "lib/cpu_baseline.mpy": {
+      "sha256": "12d538e1706124bcd490a1e5d15f75502a0c05ae97e0e8762d90c1c313e2bfc4",
+      "size": 653
     },
-    "lib/datalogger.py": {
-      "sha256": "f5ea1ad6dd864554e4376517b890b7436715cb3ed7e726c4f91aaf4c7499dff4",
-      "size": 4672
+    "lib/datalogger.mpy": {
+      "sha256": "922fcbba4883c78665cd905b5afc15e8fe00c751d37e5595ee4ff749a0924637",
+      "size": 2174
     },
-    "lib/laser_module.py": {
-      "sha256": "75a837cba80a5aa473562b1da9159b19bfa291d996f60b08166c19f4cdc670cd",
-      "size": 5367
+    "lib/laser_module.mpy": {
+      "sha256": "81e6ba862dbb99c2fda07dd2af3b871c026761e52a1d08b5127495ff877d6756",
+      "size": 2256
     },
-    "lib/ledblinker.py": {
-      "sha256": "1ceea55f767cf6eaadc7386ae9bed0c626523004813a25be5235390ff206c7cf",
-      "size": 1299
+    "lib/ledblinker.mpy": {
+      "sha256": "896768c9e4600b99aa894b96d121a5b0a6445ce1c13b76abb8c5af7e272fa280",
+      "size": 660
     },
-    "lib/logger.py": {
-      "sha256": "a3c82a301e814f671a20b51af22374abd3babf484df3307f2f3c07b5b6b8acb5",
-      "size": 3676
+    "lib/logger.mpy": {
+      "sha256": "439f8704aaf70e6ab136b45f2c9ad7158e9f2b6bf3023e601f09a8a32901a75b",
+      "size": 1710
     },
-    "lib/mpu6050_minimal.py": {
-      "sha256": "f9bec1e68a4c9243978d54a6761f5641998b56ca2f5cd9f97e79f26cafd0621d",
-      "size": 1543
+    "lib/mpu6050_minimal.mpy": {
+      "sha256": "3474ea3ce5dcfff9127fd2c8c41c511548951c5e3cb430a7760385bf44a5e2fb",
+      "size": 920
     },
-    "lib/ota.py": {
-      "sha256": "837f947b8947b25ee7ae5162afa5b514a040dcdf012a17c88488beffda84dddc",
-      "size": 13493
+    "lib/ota.mpy": {
+      "sha256": "c5d8c6788f6ac12fb78fa2167452ec3289d39c9dfae719621606db8ff9ccaba8",
+      "size": 6015
     },
-    "lib/ota_manager.py": {
-      "sha256": "b0119d3db1f58b14e20685cd3c720b39aae5d1662e512a75dd2061902ee8f135",
-      "size": 6538
+    "lib/ota_manager.mpy": {
+      "sha256": "7d3a08e119da37ea67bedffbed693e047884990371f763103658abb010fd77ef",
+      "size": 3163
     },
-    "lib/sdcard.py": {
-      "sha256": "5aa0839906790ce26c354fc6a79e5fe711e6df985e34ce7b6035b6193df8e2c1",
-      "size": 10088
+    "lib/sdcard.mpy": {
+      "sha256": "2eff55c381fdeb0a927f7db66959dfd897e74b209c2d3ad9f82a1ee1eee1797b",
+      "size": 2612
     },
-    "lib/sdcard_manager.py": {
-      "sha256": "2b33db5b8d9a8b68f84dab09fead3b28e827b258ed99f7b9152b48ed6605898c",
-      "size": 4232
+    "lib/sdcard_manager.mpy": {
+      "sha256": "7baceaadd68b46d3c821836a6e527dcd289dcb29fdb1b017713292d7704cf061",
+      "size": 1895
     },
-    "lib/sensor_settings.py": {
-      "sha256": "45c74c6e1c065f9497ccb2802135c36985cd47ba626161a2eee39e8329b90cdc",
-      "size": 161
+    "lib/sensor_settings.mpy": {
+      "sha256": "528b5507862d1347319483252dadd62b0e91a7e7ddf5e2c16a272de0ba36103c",
+      "size": 272
     },
-    "lib/shared_state.py": {
-      "sha256": "c19a4c0b83ce370adf95b8519ab29665be29862cc63323973d374b34e7ebf6a4",
-      "size": 698
+    "lib/shared_state.mpy": {
+      "sha256": "b0b609695ce94afa288b0d329a8e01e2fcd5684983e42dc501f9b9cae9f337da",
+      "size": 365
     },
-    "lib/simplequeue.py": {
-      "sha256": "24e1047b02a44883cbde9eaf33a6da843a59bc90efb2bc788003a110f640dbbe",
-      "size": 833
+    "lib/simplequeue.mpy": {
+      "sha256": "8021bd0c570ec42d9527674ad56f31e1cae1a5cb78fe476081b2e6f57ceaa97d",
+      "size": 468
     },
-    "lib/ssd1306.py": {
-      "sha256": "156dcec110abede4b36eefb5667b787240f662e8ec173b3414854398afb9b5df",
-      "size": 4946
+    "lib/ssd1306.mpy": {
+      "sha256": "08e3d58dcfe80f66f5f04d2b6ae3397da56c29245fd7172fe9883ddecae00e7d",
+      "size": 1989
     },
-    "lib/sysmon.py": {
-      "sha256": "7f169f3aa4a22c89a7ba302979735deefcd1f15e0d7102322c52035671ba2fbd",
-      "size": 1806
+    "lib/sysmon.mpy": {
+      "sha256": "de0e2a7c4517f111cda94a01aad4f1294b2944c62922175f8aaeade2cf4b22e5",
+      "size": 799
     },
-    "lib/wifi_manager.py": {
-      "sha256": "a28b04b2aa1647663d2acb3c85cc5d019f92b352bcc7893ad8a2d4c210485ded",
-      "size": 5396
+    "lib/wifi_manager.mpy": {
+      "sha256": "77bfb7caf8ded7ecee121edbf807b4c788e32dec80e64288360638d162d7e53e",
+      "size": 1955
     },
-    "lib/scaled_ui/button_handler.py": {
-      "sha256": "6b1d548c441bbe49324eecc8627ff20c618a1e57d2c56ad19dc00509dabb1d29",
-      "size": 3515
+    "lib/scaled_ui/button_handler.mpy": {
+      "sha256": "b1a2e49543879441a05ed75e161d0ef8432b98ffceb041542e79a8582d5dc0a8",
+      "size": 1812
     },
-    "lib/scaled_ui/font_map.py": {
-      "sha256": "2437885f0fe2913b8e407db683decd73b617a06eea891241f10a025703f58928",
-      "size": 5543
+    "lib/scaled_ui/font_map.mpy": {
+      "sha256": "fe0869526926cc417227282b1a36356c7cb707b87c44b2f640f81500628e202d",
+      "size": 2462
     },
-    "lib/scaled_ui/font_renderer.py": {
-      "sha256": "8ff3cb9003ad5716346bf4976a9ee4e3e38a60deec050b6490be072333a27b7e",
-      "size": 859
+    "lib/scaled_ui/font_renderer.mpy": {
+      "sha256": "115b63878ceb9879d43d7b2ad314d950f9425822c4feceeb7116ace4e8b12fc3",
+      "size": 505
     },
-    "lib/scaled_ui/oled_ui.py": {
-      "sha256": "9280b64dfeccf9c80f8a979c083f9a9df17b30966fbf6f13814e600ba3dc8d0a",
-      "size": 2152
+    "lib/scaled_ui/oled_ui.mpy": {
+      "sha256": "cca238ae05491d84cd5d4466377725dfe823cd7430a37f18b667ad05976e3db4",
+      "size": 1284
     },
-    "lib/umqtt/robust.py": {
-      "sha256": "6958c1cacddf54680ba14fae366cecd7f3d697898e208bfe39f4f4a5ab0bbe68",
-      "size": 1355
+    "lib/umqtt/robust.mpy": {
+      "sha256": "1b097ce2a9f2e0e1bf1829561a2590acaece3f02b1286da8929550999b9edc01",
+      "size": 810
     },
-    "lib/umqtt/simple.py": {
-      "sha256": "158b05bff4cb5ee9555a910191cac6bbc408d9a6bdf34355519f2f02e9c196ca",
-      "size": 6521
+    "lib/umqtt/simple.mpy": {
+      "sha256": "758a9a75500b74ba7829019ad1ce2bcf6def022197ebbd6965b9f3a4de56e4c6",
+      "size": 2393
     },
-    "lib/uthingsboard/client.py": {
-      "sha256": "38a0c87ea5edb5869ce0487959bb9a74afd9c386e9a80c2968c5d6c7269ee73c",
-      "size": 9808
+    "lib/uthingsboard/client.mpy": {
+      "sha256": "a306b9d510a54dc23437047ff2775e8849ba49ed7d263ff01a7a58f686ebb7fe",
+      "size": 4236
     }
   }
 }
