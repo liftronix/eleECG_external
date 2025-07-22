@@ -1,9 +1,9 @@
 import uasyncio as asyncio
 import machine, gc, os, uos, time, logger, _thread
-from machine import Pin, I2C, WDT, Timer
+from machine import Pin, I2C, WDT, Timer, RTC
 
 import sysmon
-from core1_manager import core1_main, stop_core1
+from core1_manager import core1_main, stop_core1, power_state
 from shared_state import get_sensor_snapshot
 from ota_manager import (
     get_local_version,
@@ -22,43 +22,39 @@ from config_loader import load_config
 
 config = load_config()
 
+if "reset_timestamp.txt" in os.listdir("/"):
+    with open("/reset_timestamp.txt", "r") as f:
+        reset_time_stamp = f.read()
+        logger.warn(f"Starting Timestamp: {time.localtime()}")
+        t = time.localtime(int(reset_time_stamp))
+        logger.warn(f"Restored Timestamp: {t}")
+        rtc_time = (t[0], t[1], t[2], t[6], t[3], t[4], t[5], 0)
+        # year, month, day, weekday, hour, minute, second, subseconds
+        rtc = RTC()
+        rtc.datetime(rtc_time)
+    os.remove("reset_timestamp.txt")
 
-'''
-# 🛑 Safe Mode via GPIO14
-safe_pin = Pin(14, Pin.IN, Pin.PULL_UP)
-if not safe_pin.value():
-    logger.warn("Safe Mode triggered — skipping OTA and main loop")
-    import sys
-    sys.exit()
-'''
+online_lock = asyncio.Event()
+online_lock.clear() #Disconnected at start
 
-# Set the pin to HIGH
-low_power = Pin(2, Pin.OUT)
-low_power.value(1)
+ota_lock = asyncio.Event()
+ota_lock.set()  # Start with sensors enabled
 
+from platform_boot import (
+    init_power_pin, init_display, init_sys_timer, deinit_sys_timer,
+    get_uptime, get_offline_time, reset_watchdog_timer
+)
+
+init_power_pin()
 
 # 🖥 Display
 from scaled_ui.oled_ui import OLED_UI
 from scaled_ui.button_handler import ButtonHandler
-import ssd1306
 
-i2c = I2C(0, scl=Pin(5), sda=Pin(4))
-try:
-    oled = ssd1306.SSD1306_I2C(128, 64, i2c)
-    oled.fill(0)
-    oled.show()
-except OSError as e:
-    logger.error("OLED init error:", e)
 
+oled = init_display()
 ui = OLED_UI(oled, scale=2)
 ui.show_message(f"ELE-ECG\n{get_local_version()}")
-
-# 🔆 LED Setup
-led = Pin('LED', Pin.OUT)
-led.value(0)
-
-online_lock = asyncio.Event()
-online_lock.clear() #Disconnected at start
 
 # 📶 Wi-Fi Manager
 wifi = WiFiManager(
@@ -67,36 +63,12 @@ wifi = WiFiManager(
 )
 wifi.start(online_lock)
 
-ota_lock = asyncio.Event()
-ota_lock.set()  # Start with sensors enabled
-
 # 🕒 REPL-safe boot delay
 print("⏳ Boot delay... press Stop in Thonny to break into REPL")
 time.sleep(3)
 
-# Global counter for seconds
-uptime_s = 0
-
-def tick(timer):
-    global uptime_s
-    uptime_s += 1  # Timer fires every 1s
-
-# Initialize the timer to call tick() every 1s
-t = Timer()
-t.init(mode=Timer.PERIODIC, period=1000, callback=tick)
-
-def get_uptime():
-    return uptime_s
-
-'''
-# Initialize watchdog with 8000ms timeout
-wdt = WDT(timeout=8000)
-
-async def wdt_feeder():
-    while True:
-        wdt.feed()
-        await asyncio.sleep(2)
-'''
+# --- System Timer ---
+sys_timer = init_sys_timer(online_lock)
 
 # 🧮 Config Sync
 def sync_config_if_changed(sd_path="/sd/config.json", flash_path="/config.json", file_name="config.json"):
@@ -131,6 +103,10 @@ async def drain_sensor_data(datalogger, ota_lock):
     last_seq = {}
     while True:
         await ota_lock.wait()  # ⛔ Block if OTA is active
+        if power_state['low_power_mode']:
+            logger.warn("💤 Low Power Mode — Sensors Paused")
+            await asyncio.sleep(5)  # Pause during low power
+            continue
         snapshot = get_sensor_snapshot()
         if not snapshot or "payload" not in snapshot or "seq" not in snapshot:
             await asyncio.sleep_ms(100)
@@ -163,6 +139,10 @@ async def drain_sensor_data(datalogger, ota_lock):
 async def drain_laser_data(laser, snapshot_ref, datalogger, ota_lock):
     while True:
         await ota_lock.wait()  # ⛔ Block if OTA is active
+        if power_state['low_power_mode']:
+            logger.warn("💤 Low Power Mode — Laser Paused")
+            await asyncio.sleep(5)  # Pause during low power
+            continue
         try:
             snapshot = await laser.measure_and_log(tag="laser")
             snapshot_ref.clear()
@@ -190,21 +170,30 @@ async def drain_laser_data(laser, snapshot_ref, datalogger, ota_lock):
             logger.warn(f"Laser: Polling error — {e}")
         await asyncio.sleep_ms(1000)
 
+import ujson
+
+def log_payload_size(payload):
+    payload_str = ujson.dumps(payload)
+    return len(payload_str)
 
 # MQTT Publish
 mqtt_seq_counter = 0
-device_uptime = 0
-async def send_to_thingsboard(client, ota_lock, ui):
+async def send_to_thingsboard(client, ota_lock, online_lock, ui):
     global mqtt_seq_counter
     while True:
         try:
             await asyncio.wait_for(online_lock.wait(), timeout=20)
             await ota_lock.wait()  # ⛔ Block if OTA is active
+            if power_state['low_power_mode']:
+                logger.warn("💤 Low Power Mode — skipping telemetry this round")
+                await asyncio.sleep(5)  # Pause during low power
+                continue
             try:
-                client.connect()
+                if not (client.is_connected()):
+                    client.connect()
+                
                 mqtt_seq_counter += 1
-                ui.show_message(f"MQTT\n{mqtt_seq_counter}")
-
+                
                 # Read global snapshot safely
                 async with latest_sensor_lock:
                     snapshot = latest_sensor_data.copy()
@@ -216,12 +205,21 @@ async def send_to_thingsboard(client, ota_lock, ui):
                 l_time = "{:02d}:{:02d}:{:02d}".format(
                     local_time[3], local_time[4], local_time[5]
                 )
-
+                '''
                 # Package Telemetry Data
                 payload = {
                     'Seq': str(mqtt_seq_counter),
                     'FW_Version': f"{get_local_version()}",
                     'device_uptime':f"{get_uptime()} sec",
+                    'device_offline_time':f"{get_offline_time()} sec",
+                    'device_date': l_date,
+                    'device_time': l_time
+                }
+                '''
+                # Package Telemetry Data
+                payload = {
+                    'Seq': str(mqtt_seq_counter),
+                    'FW_Version': f"{get_local_version()}",
                     'device_date': l_date,
                     'device_time': l_time
                 }
@@ -231,7 +229,7 @@ async def send_to_thingsboard(client, ota_lock, ui):
                     disp_data = value_dict.get("disp_data")
                     
                     if disp_data is not None:
-                        payload[f"{sensor}_value"] = disp_data
+                        payload[f"{sensor}_val"] = disp_data
                     else:
                         # Optional: log warning and include fallback
                         logger.warn(f"{sensor}: disp_data missing. Sending error or raw value.")
@@ -239,7 +237,7 @@ async def send_to_thingsboard(client, ota_lock, ui):
 
                 client.send_telemetry(payload, qos=1)
                 logger.info(f"📤 Telemetry sent: {payload}")
-                client.disconnect()
+                logger.warn(f"Payload size = {log_payload_size(payload)} bytes")
             except Exception as e:
                 logger.error(f"⚠️ MQTT Publish Error: {e}")
         
@@ -278,16 +276,20 @@ async def refresh_ui_sources(ui, online_lock):
         await asyncio.sleep(1)
 
 
-async def auto_refresh_ui(ui, online_lock, interval=2):
+async def auto_refresh_ui(ui, ota_lock, online_lock, interval=2):
+    global mqtt_seq_counter
     while True:
-        if online_lock.is_set():  # ⛔ Connected mode, skip display refresh
-            
-            logger.debug("UI → Skipped refresh (device is online)")
-            await asyncio.sleep(interval)
+        await ota_lock.wait()  # ⛔ Block if OTA is active
+        if power_state['low_power_mode']:
+            ui.show_message(f"  LOW\n POWER")
+            await asyncio.sleep(5)  # Pause during low power
             continue
-
-        logger.debug("UI → auto_refresh_ui(): Triggering display refresh")
-        await ui._render_current()
+        if online_lock.is_set():  # ⛔ Connected mode, skip display refresh
+            ui.show_message(f"MQTT\n{mqtt_seq_counter}")
+        else:
+            logger.debug("UI → auto_refresh_ui(): Triggering display refresh")
+            await ui._render_current()
+        
         await asyncio.sleep(interval)
 
 
@@ -295,21 +297,19 @@ async def auto_refresh_ui(ui, online_lock, interval=2):
 async def main():    
     logger.info(f"🧾 Running firmware version: {get_local_version()}")
     
-    # Start watchdog feeder as a background task
-    #asyncio.create_task(wdt_feeder())
-    
     asyncio.create_task(sysmon.idle_task())          # Track idle time
     asyncio.create_task(sysmon.monitor_resources())  # Start diagnostics
     
-    led_blinker = LEDBlinker(pin_num='LED', interval_ms=200)
+    # 🔆 LED Setup
+    led_blinker = LEDBlinker(pin_num='LED', interval_ms=500)
     led_blinker.start()
     
     # OTA 
     ui = OLED_UI(oled, scale=2)
-    await apply_ota_if_pending(led)
+    await apply_ota_if_pending(led_blinker)
     await verify_ota_commit(online_lock, ota_lock, ui)
     
-    asyncio.create_task(check_and_download_ota(led, ota_lock, ui, online_lock))
+    asyncio.create_task(check_and_download_ota(led_blinker, ota_lock, ui, online_lock))
     
     # SD Card and Data Logger
     sd = SDCardManager()
@@ -338,7 +338,7 @@ async def main():
     sensor_display_fns = await get_sensor_display_functions()
     ui = OLED_UI(oled, sensor_display_fns, scale=2)
     asyncio.create_task(refresh_ui_sources(ui, online_lock))
-    asyncio.create_task(auto_refresh_ui(ui, online_lock))
+    asyncio.create_task(auto_refresh_ui(ui, ota_lock, online_lock))
     await ui.next()
     
     # UI-button
@@ -350,16 +350,21 @@ async def main():
     mqttHost = config.get("mqtt").get("host")
     mqttKey = config.get("mqtt").get("key")
     client = TBDeviceMqttClient(mqttHost, access_token = mqttKey)
-    asyncio.create_task(send_to_thingsboard(client, ota_lock, ui))
+    asyncio.create_task(send_to_thingsboard(client, ota_lock, online_lock, ui))
     
     while True:
+        reset_watchdog_timer() # Clear WDT to prevent reset
         status = wifi.get_status()
-        print(f"WiFi Status: {status['WiFi']}, Internet: {status['Internet']}")
+        logger.info(f"WiFi Status: {status['WiFi']}, Internet: {status['Internet']}")
         print(f"IP Address: {wifi.get_ip_address()}")
        
         if not ota_lock.is_set():
             logger.debug("📴 Sensor paused due to OTA activity")
         
+        if not online_lock.is_set():
+            logger.debug("📴 MQTT Paused due to no connectivity")
+            client.disconnect()
+            
         await asyncio.sleep(10)
 
 # 🧹 Graceful Shutdown
@@ -368,6 +373,7 @@ try:
 except KeyboardInterrupt:
     logger.info("🔻 Ctrl+C detected — shutting down...")
     stop_core1()
+    deinit_sys_timer()
     time.sleep(1)
     logger.info("🛑 System shutdown complete.")
 

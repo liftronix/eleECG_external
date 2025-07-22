@@ -1,16 +1,16 @@
 {
-  "version": "0.4.26",
+  "version": "0.4.40",
   "files": {
     "config.json": {
-      "sha256": "536aec6e675c41e993cabce5b946437c66644b41ab760f71522e3c86f77af92a",
-      "size": 211
+      "sha256": "7a9a04dfa5e230588d5374d85f6ee6cafca91377b5a8d40727e83b1c5db09eed",
+      "size": 302
     },
     "main.py": {
-      "sha256": "85d76310fb8e24e3f65f045d4a9cceb56c8531359fec48364b9044df84047c2b",
-      "size": 12135
+      "sha256": "3eb3570154646cc0937a578e0e41bf9209bd0b38424a83acda55d4885586a8a6",
+      "size": 13541
     },
     "version.txt": {
-      "sha256": "abc4c06419e904aa0eb1e19685f897159e75fce9878fa101485edb5ddfcade19",
+      "sha256": "9aecbebe1b26b631a16a2b188f5da3d97997ba741f120911aec1637e8231250b",
       "size": 6
     },
     "lib/config_loader.mpy": {
@@ -18,28 +18,28 @@
       "size": 273
     },
     "lib/core1_manager.mpy": {
-      "sha256": "17fded7fd2c1398fd991accccb70aa0bcfc2d96ea41c84d91612041185b4d7b6",
-      "size": 2946
+      "sha256": "2b8130391201f7294ef1ece7f9036ea6ecd08ba1960397c997ca9c2e2b026285",
+      "size": 3919
     },
     "lib/cpu_baseline.mpy": {
       "sha256": "12d538e1706124bcd490a1e5d15f75502a0c05ae97e0e8762d90c1c313e2bfc4",
       "size": 653
     },
     "lib/datalogger.mpy": {
-      "sha256": "922fcbba4883c78665cd905b5afc15e8fe00c751d37e5595ee4ff749a0924637",
-      "size": 2174
+      "sha256": "c4898fdb5aaaa6e0b155446a93f3662c5381b9f922edf3736156457a31ed8927",
+      "size": 3733
     },
     "lib/laser_module.mpy": {
       "sha256": "81e6ba862dbb99c2fda07dd2af3b871c026761e52a1d08b5127495ff877d6756",
       "size": 2256
     },
     "lib/ledblinker.mpy": {
-      "sha256": "896768c9e4600b99aa894b96d121a5b0a6445ce1c13b76abb8c5af7e272fa280",
-      "size": 660
+      "sha256": "08f98a89efa0fee8604f7461c52b2c94a64fa3a7d2f62865aa5c4dd351ac2c0c",
+      "size": 666
     },
     "lib/logger.mpy": {
-      "sha256": "439f8704aaf70e6ab136b45f2c9ad7158e9f2b6bf3023e601f09a8a32901a75b",
-      "size": 1710
+      "sha256": "94ba65facf369ffdd3d3180c15081a0034a03e6f07df7147226a5964658142e8",
+      "size": 2116
     },
     "lib/mpu6050_minimal.mpy": {
       "sha256": "3474ea3ce5dcfff9127fd2c8c41c511548951c5e3cb430a7760385bf44a5e2fb",
@@ -50,8 +50,12 @@
       "size": 6015
     },
     "lib/ota_manager.mpy": {
-      "sha256": "7d3a08e119da37ea67bedffbed693e047884990371f763103658abb010fd77ef",
-      "size": 3163
+      "sha256": "1a3fd25df84de0e58575c65e05eb969ca3e5a0f15adcc418c1d287e620327dd7",
+      "size": 3204
+    },
+    "lib/platform_boot.mpy": {
+      "sha256": "c841bbe9fd0bab4da69f840ec299669650c791873ca16350630dfb7af48fc541",
+      "size": 1229
     },
     "lib/sdcard.mpy": {
       "sha256": "2eff55c381fdeb0a927f7db66959dfd897e74b209c2d3ad9f82a1ee1eee1797b",
@@ -82,8 +86,8 @@
       "size": 799
     },
     "lib/wifi_manager.mpy": {
-      "sha256": "77bfb7caf8ded7ecee121edbf807b4c788e32dec80e64288360638d162d7e53e",
-      "size": 1955
+      "sha256": "51cce3c29afd83d58a279b7fce1cef03cc1cf860f6d539be946689bf4756c267",
+      "size": 2738
     },
     "lib/scaled_ui/button_handler.mpy": {
       "sha256": "b1a2e49543879441a05ed75e161d0ef8432b98ffceb041542e79a8582d5dc0a8",
