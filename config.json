@@ -12,4 +12,12 @@
       "battery_time_mins":"20",
       "restore_debounce_sec":"30"
   }
+  "thresholds":{
+      "temp_high":"50",
+      "temp_low":"0",
+      "humidity_high":"80",
+      "humidity_low":"10",
+      "noise_high":"1.00",
+      "noise_low":"0.01"
+  }
 }
