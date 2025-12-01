@@ -243,7 +243,7 @@ async def send_to_thingsboard(client, ota_lock, online_lock, ui):
             logger.warn("⏳ Online check timed out — skipping telemetry this round")
             
         publish_interval = int(config.get("mqtt").get("publish_interval_sec"))
-        await asyncio.sleep(max(5, publish_interval))
+        await asyncio.sleep(max(1, publish_interval))
 
 
 # Display Functions

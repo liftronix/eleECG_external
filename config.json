@@ -6,7 +6,7 @@
   "mqtt": {
       "host": "demo.thingsboard.io",
       "key": "3NwWSM4F9a35rsPyhvI9",
-      "publish_interval_sec": "5"
+      "publish_interval_sec": "1"
   }
   "low_power":{
       "battery_time_mins":"20",

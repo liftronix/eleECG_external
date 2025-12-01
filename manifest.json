@@ -1,25 +1,29 @@
 {
-  "version": "0.4.43",
+  "version": "0.4.44",
   "files": {
     "config.json": {
-      "sha256": "4978e3ae3b3c62519afab6b6f3fa39780ae120abcede6ae089598a049c39e870",
+      "sha256": "3ae006ebbda262c7263f4cba79c3bab394f0457b0d8c985bc39f2aea73b6e0d6",
       "size": 484
     },
     "main.py": {
-      "sha256": "b579b129b6acf8dd76f2da4ea8f8aec397709484e339c8bbe6d3e1423ef0e968",
+      "sha256": "7f0e3f0c04b25f7a8a01cddb09d581a4c9428c7d993a79c39704dfd814bdf7fd",
       "size": 13326
     },
     "version.txt": {
-      "sha256": "72e9297951726d54cffd210f053e8d686f48d12cd377e3eef40f1bf9a8053a6f",
+      "sha256": "73ad05d6b0828e5cfce16ba8ad15f9c8816354280f3e8da8832f68c4bc85f326",
       "size": 6
+    },
+    "lib/ahtx0.mpy": {
+      "sha256": "c0d59e464e937553ee0128a8bb5cbdc9daa8e885bee9a092cc302a3b4726003f",
+      "size": 1201
     },
     "lib/config_loader.mpy": {
       "sha256": "d8613befda2b306d281fc34d10ac24f7dd475998db6eddbb160c6c5b3c0fc6bc",
       "size": 273
     },
     "lib/core1_manager.mpy": {
-      "sha256": "f00bb8a57767142e1a85c6442c9e1233ede512bc50c3c3fdd5e5b1094ee236c2",
-      "size": 4410
+      "sha256": "6c42375d14cf6ce947d90c0bc398f6f8022ce21d9a366a975e55bd1c7f072e7e",
+      "size": 5122
     },
     "lib/cpu_baseline.mpy": {
       "sha256": "12d538e1706124bcd490a1e5d15f75502a0c05ae97e0e8762d90c1c313e2bfc4",
